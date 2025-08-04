@@ -1,5 +1,5 @@
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import ForeignKey, text, String 
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey, text, String
 
 from typing import Annotated
 
@@ -25,6 +25,7 @@ class Users(Base):
     created_at: Mapped[created_at]
     updated_at: Mapped[updated_at]
 
+    resumes: Mapped[list["Resumes"]] = relationship()
 
 class Workload(enum.Enum):
     parttime = "parttime"
@@ -41,11 +42,13 @@ class Resumes(Base):
     active: Mapped[bool] = mapped_column(default=False)
     compensation_min: Mapped[int | None]
     compensation_max: Mapped[int | None]
-    Workload: Mapped[Workload]
+    workload: Mapped[Workload]
 
     created_at: Mapped[created_at]
     updated_at: Mapped[updated_at]
 
+
+    worker: Mapped["Users"] = relationship()
 
 
 
