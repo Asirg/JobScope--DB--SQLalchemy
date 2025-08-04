@@ -1,9 +1,10 @@
-from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from sqlalchemy import create_engine, text
 
 import asyncio
 
-from settings import settings
+from src.settings import settings
 
 
 sync_engine = create_engine(
@@ -20,13 +21,10 @@ async_engine = create_async_engine(
     # max_overflow=10 # Кол-во доп подключений к бд
 )
 
+sync_session = sessionmaker(sync_engine)
+async_session = async_sessionmaker(async_sessionmaker)
 
-def get_sync_connect():
-    with sync_engine.connect() as conn:
-        return conn
 
-async def get_async_connect():
-    async with async_engine.connect() as conn:
-        yield conn
 
-asyncio.run(get_async_connect())
+class Base(DeclarativeBase):
+    pass
