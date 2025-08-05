@@ -4,19 +4,14 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 import asyncio
 
-from queries.orm import *
+from src.queries.base import create_tables
 
 
-async def main():
-    create_tables()
-    await insert_user()
-    # await select_all_users()
-    # await update_users()
-    await insert_resumes()
-    # await select_resumes_avg_compensation()
-    # await get_avg_diff_compensation()
-    # select_users_with_lazy_relationship()
-    select_users_with_selectin_relationship()
+# async def main():
+#     create_tables()
+    
 
-if __name__ == '__main__':
-    asyncio.run(main())
+# if __name__ == '__main__':
+#     asyncio.run(main())
+
+create_tables()
