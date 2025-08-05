@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey, text, String
+from sqlalchemy import ForeignKey, text, String, Index, CheckConstraint
 
 from typing import Annotated
 
@@ -25,7 +25,9 @@ class Users(Base):
     created_at: Mapped[created_at]
     updated_at: Mapped[updated_at]
 
-    resumes: Mapped[list["Resumes"]] = relationship()
+    resumes: Mapped[list["Resumes"]] = relationship(
+        back_populates="user",
+    )
 
 class Workload(enum.Enum):
     parttime = "parttime"
@@ -48,26 +50,12 @@ class Resumes(Base):
     updated_at: Mapped[updated_at]
 
 
-    worker: Mapped["Users"] = relationship()
+    user: Mapped["Users"] = relationship(
+        back_populates="resumes",
+    )
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-# metadata_obj = MetaData()
-
-# users_table = Table(
-#     "users",
-#     metadata_obj,
-#     Column("user_id", Integer, primary_key=True),
-#     Column("username", String),
-# )
+    __table_args__= (
+        Index('title_index', 'title'),
+        CheckConstraint("compensation_min > 0", name="check_componsation_positive")
+    )
